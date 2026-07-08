@@ -1,0 +1,8 @@
+# Secrets -- never commit
+.env
+
+# Generated artifacts -- regenerable, and the vectors are large binary blobs
+# that don't belong in git history. Distribute output/*.zip separately
+# (GitHub Release asset, shared drive, Git LFS) instead of committing it.
+cache/
+output/
