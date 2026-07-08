@@ -7,5 +7,9 @@
 cache/
 output/
 
+# Exceptions for KB bundle
+!output/*.zip
+!.gitattributes
+
 # Python cache
 __pycache__/
