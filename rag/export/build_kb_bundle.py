@@ -10,7 +10,7 @@ generated .zip separately.
 
 Input:  rag/export/output/kb_manifest.jsonl
         rag/export/output/kb_vectors.npz
-Output: rag/export/output/nyc_health_code_kb_<date>.zip
+Output: rag/export/output/nyc_health_codes_kb_<date>.zip
 
 Run:
     python build_kb_bundle.py
@@ -26,7 +26,7 @@ MANIFEST_PATH = OUTPUT_DIR / "kb_manifest.jsonl"
 VECTORS_PATH = OUTPUT_DIR / "kb_vectors.npz"
 
 TODAY = date.today().isoformat()
-BUNDLE_PATH = OUTPUT_DIR / f"nyc_health_code_kb_{TODAY}.zip"
+BUNDLE_PATH = OUTPUT_DIR / f"nyc_health_codes_kb_{TODAY}.zip"
 
 README_TEXT = """NYC Health Code knowledge base export
 Generated: {date}

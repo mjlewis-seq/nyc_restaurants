@@ -1,4 +1,4 @@
-ragflow-sdk
+requests
 voyageai
 numpy
 python-dotenv

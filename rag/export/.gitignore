@@ -6,3 +6,6 @@
 # (GitHub Release asset, shared drive, Git LFS) instead of committing it.
 cache/
 output/
+
+# Python cache
+__pycache__/
