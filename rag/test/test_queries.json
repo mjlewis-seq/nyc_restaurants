@@ -1,0 +1,250 @@
+{
+  "query": "Can a person sell adulterated or misbranded food?",
+  "query_type": "direct",
+  "expected_doc": "pdf/health-code-article71.pdf",
+  "expected_chunk_ids": ["067b594ada1a6368"],
+  "notes": null
+}
+{
+  "query": "When is food deemed adulterated?",
+  "query_type": "direct",
+  "expected_doc": "pdf/health-code-article71.pdf",
+  "expected_chunk_ids":
+  [
+    "f8fc28451113a3fd",
+    "ccd0ae05ea83feb4",
+    "e58c35d41d9dac11",
+    "39668217fea0519e",
+    "a28801384136bcde",
+    "cc6bba16e4c3c3c8",
+    "ee2694899eeb8e12",
+    "641cf05b30411dae",
+    "d4968b91aa00322c"
+  ],
+  "notes": "There are 9 criteria for this answer. Answer spans multiple chunks."
+}
+{
+  "query": "What is the minimum cooking temperature at which roast beef should be cooked?",
+  "query_type": "paraphrased",
+  "expected_doc": "pdf/health-code-article81.pdf",
+  "expected_chunk_ids": ["1a67eacf6f948d12"],
+  "notes": null
+}
+{
+  "query": "When can employees and patrons not use the same toilets?",
+  "query_type": "paraphrased",
+  "expected_doc": "pdf/health-code-article81.pdf",
+  "expected_chunk_ids": ["2e38055261e3296b"],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-article88.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-article88.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "Can anyone apply for a mobile vending unit permit?",
+  "query_type": "paraphrased",
+  "expected_doc": "pdf/health-code-article-89.pdf",
+  "expected_chunk_ids":
+  [
+    "bce1b686a185e7c1"
+  ],
+  "notes": null
+}
+{
+  "query": "How is food defined in Article 89?",
+  "query_type": "cross-ref",
+  "expected_doc": "pdf/health-code-article-89.pdf",
+  "expected_chunk_ids":
+  [
+    "9ebb68a83fca19b0",
+    "5d9bf0bb908d2d38"
+  ],
+  "notes": "The first chunk says that Article 89 defines food the way it is defined in Article 71. The second chunk contains the food definition from Article 71."
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-article151.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-article151.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-article181.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-article181.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter1.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter1.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter1.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter6.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter6.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter23.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter23.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter23.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter23.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter27.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter27.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter31.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
+{
+  "query": "",
+  "query_type": "",
+  "expected_doc": "pdf/health-code-chapter31.pdf",
+  "expected_chunk_ids":
+  [
+    ""
+  ],
+  "notes": null
+}
