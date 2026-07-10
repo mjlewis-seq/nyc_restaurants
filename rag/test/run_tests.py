@@ -47,8 +47,16 @@ Example .env:
 Then simply:
     python run_tests.py --queries test_queries.json --k 10
 
-All generated reports (JSON, optional CSV) are written under --output-dir
-(default: ./output), which is created automatically if it doesn't exist.
+All generated reports are written under --output-dir (default: ./output),
+created automatically if it doesn't exist:
+
+  - output/<run_id>/test_results.json — full detail from that run
+  - output/<run_id>/test_results.csv  — optional per-query summary (--csv)
+  - output/history.jsonl              — append-only, one row per query per
+                                         run (never overwritten), so you can
+                                         track a query's metrics across runs
+                                         as you expand test_queries.json over
+                                         time. Disable with --no-history.
 
 ------------------------------------------------------------------------
 """
@@ -63,7 +71,9 @@ import re
 import statistics
 import sys
 import time
+import uuid
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
 
@@ -116,6 +126,9 @@ class Config:
     output_dir: Path
     output_name: str
     write_csv: bool
+    history_enabled: bool
+    history_name: str
+    run_id: str
     k: int
     top_k: int
     similarity_threshold: float
@@ -127,14 +140,26 @@ class Config:
     verbose: bool
 
     @property
+    def run_dir(self) -> Path:
+        # Each run's full-detail JSON/CSV live in their own subfolder, named
+        # after the run_id, for tidy organization as runs pile up.
+        return self.output_dir / self.run_id
+
+    @property
     def output_path(self) -> Path:
-        return self.output_dir / self.output_name
+        return self.run_dir / self.output_name
 
     @property
     def csv_path(self) -> Optional[Path]:
         if not self.write_csv:
             return None
-        return self.output_dir / (Path(self.output_name).stem + ".csv")
+        return self.run_dir / f"{Path(self.output_name).stem}.csv"
+
+    @property
+    def history_path(self) -> Optional[Path]:
+        if not self.history_enabled:
+            return None
+        return self.output_dir / self.history_name
 
 
 def parse_args(argv: Optional[list[str]] = None) -> Config:
@@ -171,6 +196,12 @@ def parse_args(argv: Optional[list[str]] = None) -> Config:
                          help="Filename for the detailed JSON report, inside --output-dir (default: %(default)s)")
     parser.add_argument("--csv", action="store_true",
                          help="Also write a per-query CSV summary into --output-dir")
+    parser.add_argument("--history-name", default="history.jsonl",
+                         help="Append-only JSON-lines log (one row per query per run) inside "
+                              "--output-dir, for tracking a query's metrics across runs over time "
+                              "(default: %(default)s)")
+    parser.add_argument("--no-history", action="store_true",
+                         help="Disable writing to the history log")
     parser.add_argument("--k", type=int, default=10,
                          help="Number of chunks to retrieve per query, i.e. page_size (default: %(default)s)")
     parser.add_argument("--top-k", type=int, default=1024,
@@ -207,6 +238,9 @@ def parse_args(argv: Optional[list[str]] = None) -> Config:
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    run_id = uuid.uuid4().hex[:12]
+    (output_dir / run_id).mkdir(parents=True, exist_ok=True)
+
     return Config(
         base_url=args.base_url.rstrip("/"),
         api_key=args.api_key,
@@ -216,6 +250,9 @@ def parse_args(argv: Optional[list[str]] = None) -> Config:
         output_dir=output_dir,
         output_name=args.output_name,
         write_csv=args.csv,
+        history_enabled=not args.no_history,
+        history_name=args.history_name,
+        run_id=run_id,
         k=args.k,
         top_k=args.top_k,
         similarity_threshold=args.similarity_threshold,
@@ -490,8 +527,11 @@ def print_summary(summary: dict[str, Any], k: int) -> None:
     print("=" * 72 + "\n")
 
 
-def write_json_report(results: list[QueryResult], summary: dict[str, Any], cfg: Config) -> None:
+def write_json_report(results: list[QueryResult], summary: dict[str, Any], cfg: Config,
+                       run_id: str, timestamp: str) -> None:
     report = {
+        "run_id": run_id,
+        "timestamp": timestamp,
         "config": {
             "base_url": cfg.base_url,
             "dataset_ids": cfg.dataset_ids,
@@ -528,6 +568,45 @@ def write_json_report(results: list[QueryResult], summary: dict[str, Any], cfg: 
     print(f"Wrote detailed JSON report to {cfg.output_path}")
 
 
+def append_history(results: list[QueryResult], cfg: Config, run_id: str, timestamp: str) -> None:
+    """Append one JSON-line per query to the history log.
+
+    This is additive (never overwritten), so re-running with an expanded or
+    edited test_queries.json builds up a per-query time series you can later
+    load (e.g. `pandas.read_json(path, lines=True)`) and group by "query" to
+    see how recall/precision/rank for that specific query trend across runs
+    and across parameter changes (k, rerank_id, similarity_threshold, etc.).
+    """
+    path = cfg.history_path
+    if path is None:
+        return
+
+    with path.open("a", encoding="utf-8") as f:
+        for r in results:
+            row = {
+                "run_id": run_id,
+                "timestamp": timestamp,
+                "query": r.query,
+                "query_type": r.query_type,
+                "expected_doc": r.expected_doc,
+                "recall": r.recall,
+                "precision": r.precision,
+                "first_hit_rank": r.first_hit_rank,
+                "reciprocal_rank": round(r.reciprocal_rank, 4),
+                "doc_found": r.doc_found,
+                "full_recall": r.full_recall,
+                "error": r.error,
+                "k": cfg.k,
+                "top_k": cfg.top_k,
+                "similarity_threshold": cfg.similarity_threshold,
+                "vector_weight": cfg.vector_weight,
+                "rerank_id": cfg.rerank_id,
+                "keyword": cfg.keyword,
+            }
+            f.write(json.dumps(row) + "\n")
+    print(f"Appended {len(results)} rows to history log at {path}")
+
+
 def write_csv_report(results: list[QueryResult], path: Path) -> None:
     fieldnames = ["query", "query_type", "expected_doc", "recall", "precision",
                   "first_hit_rank", "reciprocal_rank", "doc_found", "full_recall", "error"]
@@ -562,11 +641,14 @@ def main(argv: Optional[list[str]] = None) -> int:
         print("No test queries found — nothing to do.", file=sys.stderr)
         return 1
 
+    run_id = cfg.run_id
+    timestamp = datetime.now(timezone.utc).isoformat()
+
     client = RagflowClient(cfg)
     results: list[QueryResult] = []
 
     print(f"Running {len(queries)} test queries against {cfg.base_url} "
-          f"(dataset_ids={cfg.dataset_ids or 'n/a'}, k={cfg.k})...\n")
+          f"(dataset_ids={cfg.dataset_ids or 'n/a'}, k={cfg.k})  [run_id={run_id}]...\n")
 
     for i, tq in enumerate(queries, start=1):
         try:
@@ -594,9 +676,10 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     summary = summarize(results)
     print_summary(summary, cfg.k)
-    write_json_report(results, summary, cfg)
+    write_json_report(results, summary, cfg, run_id, timestamp)
     if cfg.csv_path:
         write_csv_report(results, cfg.csv_path)
+    append_history(results, cfg, run_id, timestamp)
 
     return 0
 
