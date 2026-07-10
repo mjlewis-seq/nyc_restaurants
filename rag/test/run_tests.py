@@ -150,9 +150,7 @@ class Config:
         return self.run_dir / self.output_name
 
     @property
-    def csv_path(self) -> Optional[Path]:
-        if not self.write_csv:
-            return None
+    def csv_path(self) -> Path:
         return self.run_dir / f"{Path(self.output_name).stem}.csv"
 
     @property
@@ -677,9 +675,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     summary = summarize(results)
     print_summary(summary, cfg.k)
     write_json_report(results, summary, cfg, run_id, timestamp)
-    if cfg.csv_path:
-        write_csv_report(results, cfg.csv_path)
-    append_history(results, cfg, run_id, timestamp)
+    write_csv_report(results, cfg.csv_path)
 
     return 0
 
