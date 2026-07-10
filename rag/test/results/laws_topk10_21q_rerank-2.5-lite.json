@@ -1,0 +1,967 @@
+{
+  "run_id": "3da177c4a302",
+  "timestamp": "2026-07-10T20:51:27.290961+00:00",
+  "config": {
+    "base_url": "http://localhost:80",
+    "dataset_ids": [
+      "503fb4507a7111f197ef7f7e5160dd94"
+    ],
+    "document_ids": [],
+    "k": 10,
+    "top_k": 1024,
+    "similarity_threshold": 0.2,
+    "vector_weight": 0.3,
+    "rerank_id": "rerank-2.5-lite@Voyage AI",
+    "keyword": false
+  },
+  "summary": {
+    "overall": {
+      "count": 21,
+      "errors": 0,
+      "mean_recall": 0.8915,
+      "mean_precision": 0.1,
+      "mrr": 0.8571,
+      "doc_hit_rate": 1.0,
+      "full_recall_rate": 0.8571
+    },
+    "by_query_type": {
+      "adversarial": {
+        "count": 2,
+        "errors": 0,
+        "mean_recall": 1.0,
+        "mean_precision": 0.1,
+        "mrr": 0.75,
+        "doc_hit_rate": 1.0,
+        "full_recall_rate": 1.0
+      },
+      "cross-ref": {
+        "count": 1,
+        "errors": 0,
+        "mean_recall": 0.5,
+        "mean_precision": 0.1,
+        "mrr": 0.25,
+        "doc_hit_rate": 1.0,
+        "full_recall_rate": 0.0
+      },
+      "direct": {
+        "count": 7,
+        "errors": 0,
+        "mean_recall": 0.8889,
+        "mean_precision": 0.1143,
+        "mrr": 1.0,
+        "doc_hit_rate": 1.0,
+        "full_recall_rate": 0.8571
+      },
+      "narrow": {
+        "count": 6,
+        "errors": 0,
+        "mean_recall": 0.8333,
+        "mean_precision": 0.0833,
+        "mrr": 0.7083,
+        "doc_hit_rate": 1.0,
+        "full_recall_rate": 0.8333
+      },
+      "paraphrased": {
+        "count": 5,
+        "errors": 0,
+        "mean_recall": 1.0,
+        "mean_precision": 0.1,
+        "mrr": 1.0,
+        "doc_hit_rate": 1.0,
+        "full_recall_rate": 1.0
+      }
+    }
+  },
+  "results": [
+    {
+      "query": "Can a person sell adulterated or misbranded food?",
+      "query_type": "direct",
+      "expected_doc": "pdf/health-code-article71.pdf",
+      "expected_chunk_ids": [
+        "067b594ada1a6368"
+      ],
+      "retrieved_chunk_ids": [
+        "067b594ada1a6368",
+        "5d9bf0bb908d2d38",
+        "3c0b9f14e61ea539",
+        "f8fc28451113a3fd",
+        "8e5f70788d2001b3",
+        "0a9cab900b7fab49",
+        "838d80cdfc67e027",
+        "080cee9993789b2f",
+        "d4968b91aa00322c",
+        "b6b457d06e6a4a83"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-article47.pdf"
+      ],
+      "hit_chunk_ids": [
+        "067b594ada1a6368"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "When is food deemed adulterated?",
+      "query_type": "direct",
+      "expected_doc": "pdf/health-code-article71.pdf",
+      "expected_chunk_ids": [
+        "f8fc28451113a3fd",
+        "ccd0ae05ea83feb4",
+        "e58c35d41d9dac11",
+        "39668217fea0519e",
+        "a28801384136bcde",
+        "cc6bba16e4c3c3c8",
+        "ee2694899eeb8e12",
+        "641cf05b30411dae",
+        "d4968b91aa00322c"
+      ],
+      "retrieved_chunk_ids": [
+        "f8fc28451113a3fd",
+        "41f06dacc3554a50",
+        "e9fb6f6bb436bc4f",
+        "5d9bf0bb908d2d38",
+        "815dc25fac7678ac",
+        "3c0b9f14e61ea539",
+        "8e5f70788d2001b3",
+        "67cb2abb3ddccce9",
+        "56ca90b77ff971d1",
+        "d4968b91aa00322c"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-article71.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter9.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article71.pdf"
+      ],
+      "hit_chunk_ids": [
+        "f8fc28451113a3fd",
+        "d4968b91aa00322c"
+      ],
+      "recall": 0.2222222222222222,
+      "precision": 0.2,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": false,
+      "error": null
+    },
+    {
+      "query": "What is the minimum cooking temperature at which roast beef should be cooked?",
+      "query_type": "paraphrased",
+      "expected_doc": "pdf/health-code-article81.pdf",
+      "expected_chunk_ids": [
+        "1a67eacf6f948d12"
+      ],
+      "retrieved_chunk_ids": [
+        "1a67eacf6f948d12",
+        "24d38c41b1040fdb",
+        "3e7b33a7e042144d",
+        "8e5f70788d2001b3",
+        "fa9f2437d5160456",
+        "bcb9e6e569351e6b",
+        "f0b44f841837d294",
+        "aefc7546493633f0",
+        "3c0b9f14e61ea539",
+        "ba2ac7a29635dcf0"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf"
+      ],
+      "hit_chunk_ids": [
+        "1a67eacf6f948d12"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "When can employees and patrons not use the same toilets?",
+      "query_type": "paraphrased",
+      "expected_doc": "pdf/health-code-article81.pdf",
+      "expected_chunk_ids": [
+        "2e38055261e3296b"
+      ],
+      "retrieved_chunk_ids": [
+        "2e38055261e3296b",
+        "3e7b33a7e042144d",
+        "fa8491980ceddc9b",
+        "254c493266e55fff",
+        "8e5f70788d2001b3",
+        "4b333e22145224b8",
+        "631e0fbac362d254",
+        "2d8bc6d5cd2c2fe4",
+        "9b66e51252aa6bf2",
+        "283040d5e227d724"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-article47.pdf",
+        "pdf/health-code-article163.pdf",
+        "pdf/health-code-article88.pdf"
+      ],
+      "hit_chunk_ids": [
+        "2e38055261e3296b"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What kind of thermometers will be provided for the testing of internal food temperatures at temporary food establishments?",
+      "query_type": "narrow",
+      "expected_doc": "pdf/health-code-article88.pdf",
+      "expected_chunk_ids": [
+        "1ad96b1a40080445"
+      ],
+      "retrieved_chunk_ids": [
+        "1ad96b1a40080445",
+        "f7425f84a459497f",
+        "a08b809908b84f42",
+        "8e5f70788d2001b3",
+        "3e7b33a7e042144d",
+        "90f9f2b76f956b81",
+        "c936b40cfbefa1a7",
+        "fa9f2437d5160456",
+        "24d38c41b1040fdb",
+        "8ce5619da8d7da8d"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article88.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article89.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article88.pdf"
+      ],
+      "hit_chunk_ids": [
+        "1ad96b1a40080445"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What does an event sponsor have to submit to the Department at least a month before the start of the event?",
+      "query_type": "paraphrased",
+      "expected_doc": "pdf/health-code-article88.pdf",
+      "expected_chunk_ids": [
+        "884ff754467998f2"
+      ],
+      "retrieved_chunk_ids": [
+        "884ff754467998f2",
+        "e936c2e7b4795dea",
+        "283040d5e227d724",
+        "9799b53f0bcc238e",
+        "0a9cab900b7fab49",
+        "38015a57c62f5229",
+        "1ad96b1a40080445",
+        "b47add84f452b777",
+        "8820cd1168a7378d",
+        "a9ddbbcf9db4d4a2"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article88.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article88.pdf",
+        "pdf/health-code-article175.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article175.pdf",
+        "pdf/health-code-article88.pdf",
+        "pdf/health-code-article175.pdf",
+        "pdf/health-code-article88.pdf",
+        "pdf/health-code-article175.pdf"
+      ],
+      "hit_chunk_ids": [
+        "884ff754467998f2"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "Can anyone apply for a mobile vending unit permit?",
+      "query_type": "paraphrased",
+      "expected_doc": "pdf/health-code-article-89.pdf",
+      "expected_chunk_ids": [
+        "bce1b686a185e7c1"
+      ],
+      "retrieved_chunk_ids": [
+        "bce1b686a185e7c1",
+        "5eb97e1e67c14a74",
+        "f7425f84a459497f",
+        "0178b4648901fd1f",
+        "03fe360418fead8e",
+        "30879fcce44b2ab3",
+        "a78b388dcecb98ef",
+        "2265d3d1e7ab3846",
+        "9ebb68a83fca19b0",
+        "b2943e97f7382892"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article89.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter19.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter19.pdf",
+        "pdf/health-code-article89.pdf",
+        "pdf/health-code-article89.pdf",
+        "pdf/health-code-article89.pdf"
+      ],
+      "hit_chunk_ids": [
+        "bce1b686a185e7c1"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "How is food defined in Article 89?",
+      "query_type": "cross-ref",
+      "expected_doc": "pdf/health-code-article-89.pdf",
+      "expected_chunk_ids": [
+        "9ebb68a83fca19b0",
+        "5d9bf0bb908d2d38"
+      ],
+      "retrieved_chunk_ids": [
+        "9e1f0a6b3534903b",
+        "ded9e5be421db8a0",
+        "15e6af03fa376d68",
+        "9ebb68a83fca19b0",
+        "80f16984bec6a017",
+        "7eba935b04d29f34",
+        "a69cac0fe188e056",
+        "b8e0dc7ecb820001",
+        "c6167af33b9d9c96",
+        "90a5bc99d7fc67e6"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-chapter27.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article89.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article89.pdf",
+        "pdf/health-code-article89.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter6.pdf"
+      ],
+      "hit_chunk_ids": [
+        "9ebb68a83fca19b0"
+      ],
+      "recall": 0.5,
+      "precision": 0.1,
+      "first_hit_rank": 4,
+      "reciprocal_rank": 0.25,
+      "doc_found": true,
+      "full_recall": false,
+      "error": null
+    },
+    {
+      "query": "What does Article 151, Section 151.02, Part B say on how waste should be managed to prevent pests?",
+      "query_type": "direct",
+      "expected_doc": "pdf/health-code-article151.pdf",
+      "expected_chunk_ids": [
+        "cf0b74352dd5b329"
+      ],
+      "retrieved_chunk_ids": [
+        "cf0b74352dd5b329",
+        "9aa4f6e23957086b",
+        "db896ba36c982f6a",
+        "ae5bf6376b2c94b3",
+        "283040d5e227d724",
+        "2e38055261e3296b",
+        "2fa3ba5794138195",
+        "a3fdc0654fd5f1db",
+        "b4527ba0dabe14d6",
+        "b0b1742cf0066754"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article151.pdf",
+        "pdf/health-code-article151.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter7.pdf",
+        "pdf/health-code-article88.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article161.pdf",
+        "pdf/health-code-chapter35.pdf",
+        "pdf/health-code-chapter35.pdf",
+        "pdf/health-code-chapter6.pdf"
+      ],
+      "hit_chunk_ids": [
+        "cf0b74352dd5b329"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What is the maximum amount of time that the Department can ask a food service business to carry out a pest management plan?",
+      "query_type": "adversarial",
+      "expected_doc": "pdf/health-code-article151.pdf",
+      "expected_chunk_ids": [
+        "cf0b74352dd5b329"
+      ],
+      "retrieved_chunk_ids": [
+        "8e5f70788d2001b3",
+        "cf0b74352dd5b329",
+        "254c493266e55fff",
+        "3c0b9f14e61ea539",
+        "3e7b33a7e042144d",
+        "2fa3ba5794138195",
+        "db896ba36c982f6a",
+        "ae5bf6376b2c94b3",
+        "fa8491980ceddc9b",
+        "9aa4f6e23957086b"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article151.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article161.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter7.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article151.pdf"
+      ],
+      "hit_chunk_ids": [
+        "cf0b74352dd5b329"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 2,
+      "reciprocal_rank": 0.5,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "Is pesticide usage sufficient for pest management?",
+      "query_type": "direct",
+      "expected_doc": "pdf/health-code-article151.pdf",
+      "expected_chunk_ids": [
+        "9aa4f6e23957086b"
+      ],
+      "retrieved_chunk_ids": [
+        "9aa4f6e23957086b",
+        "db896ba36c982f6a",
+        "cf0b74352dd5b329",
+        "ae5bf6376b2c94b3",
+        "8e5f70788d2001b3",
+        "254c493266e55fff",
+        "2e38055261e3296b",
+        "91f5989613513d81",
+        "2fa3ba5794138195",
+        "c35814b4060a4e07"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article151.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article151.pdf",
+        "pdf/health-code-chapter7.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article161.pdf",
+        "pdf/health-code-chapter6.pdf"
+      ],
+      "hit_chunk_ids": [
+        "9aa4f6e23957086b"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What type of property is excluded from requirements on elimination of standing water as written in Section 151.03 of Article 151?",
+      "query_type": "narrow",
+      "expected_doc": "pdf/health-code-article151.pdf",
+      "expected_chunk_ids": [
+        "9aa4f6e23957086b"
+      ],
+      "retrieved_chunk_ids": [
+        "9aa4f6e23957086b",
+        "ae5bf6376b2c94b3",
+        "cf0b74352dd5b329",
+        "2fa3ba5794138195",
+        "a3fdc0654fd5f1db",
+        "d3c2f53db820824c",
+        "6af5d5a002f39352",
+        "d5a57f8bdfa104bc",
+        "b4527ba0dabe14d6",
+        "55f61891ff46ca29"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article151.pdf",
+        "pdf/health-code-chapter7.pdf",
+        "pdf/health-code-article151.pdf",
+        "pdf/health-code-article161.pdf",
+        "pdf/health-code-chapter35.pdf",
+        "pdf/health-code-article165.pdf",
+        "pdf/health-code-article141.pdf",
+        "pdf/health-code-article165.pdf",
+        "pdf/health-code-chapter35.pdf",
+        "pdf/health-code-article165.pdf"
+      ],
+      "hit_chunk_ids": [
+        "9aa4f6e23957086b"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What public spaces allow spitting?",
+      "query_type": "paraphrased",
+      "expected_doc": "pdf/health-code-article181.pdf",
+      "expected_chunk_ids": [
+        "98cabe488328cc7b"
+      ],
+      "retrieved_chunk_ids": [
+        "98cabe488328cc7b",
+        "1ffab911a571784c",
+        "d6e9b8109bdfd5d1",
+        "9ebb68a83fca19b0",
+        "0dcf5bee50221582",
+        "9e52ed9f3985741d",
+        "ac851671fdc7e5db",
+        "5c272361d2af137b",
+        "f29213c992fc4475",
+        "af6dfb31139ff32e"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article181.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-chapter7.pdf",
+        "pdf/health-code-article89.pdf",
+        "pdf/health-code-article47.pdf",
+        "pdf/health-code-chapter26.pdf",
+        "pdf/health-code-chapter32.pdf",
+        "pdf/health-code-chapter18.pdf",
+        "pdf/health-code-article167.pdf",
+        "pdf/health-code-chapter10.pdf"
+      ],
+      "hit_chunk_ids": [
+        "98cabe488328cc7b"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What are the requirements for dishwashing areas in commercial premises that provide common eating utensils?",
+      "query_type": "adversarial",
+      "expected_doc": "pdf/health-code-article181.pdf",
+      "expected_chunk_ids": [
+        "98cabe488328cc7b"
+      ],
+      "retrieved_chunk_ids": [
+        "98cabe488328cc7b",
+        "3e7b33a7e042144d",
+        "8e5f70788d2001b3",
+        "3c0b9f14e61ea539",
+        "884ff754467998f2",
+        "0f39b344b52e72fa",
+        "fa8491980ceddc9b",
+        "cf0b74352dd5b329",
+        "2e38055261e3296b",
+        "254c493266e55fff"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article181.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article88.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article151.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf"
+      ],
+      "hit_chunk_ids": [
+        "98cabe488328cc7b"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What does Section 181.17 of Article 181 say about smoking in an enclosed public space with 50 or more people gathered for religious purposes?",
+      "query_type": "narrow",
+      "expected_doc": "pdf/health-code-article181.pdf",
+      "expected_chunk_ids": [
+        "98cabe488328cc7b"
+      ],
+      "retrieved_chunk_ids": [
+        "98cabe488328cc7b",
+        "faa88e4d0d0406c3",
+        "c9a4a0ee46dfd97f",
+        "1ffab911a571784c",
+        "8a36e87b78909c1f",
+        "dfb95e403012d2cb",
+        "8956e9405caa9253",
+        "1e635816da4e93ca",
+        "91df2c74a1add0f8",
+        "af6dfb31139ff32e"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-article181.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-article181.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-chapter10.pdf"
+      ],
+      "hit_chunk_ids": [
+        "98cabe488328cc7b"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What sign do vendors of alcoholic beverages have to post in their establishments?",
+      "query_type": "direct",
+      "expected_doc": "pdf/health-code-chapter1.pdf",
+      "expected_chunk_ids": [
+        "67b76e2db3054e74"
+      ],
+      "retrieved_chunk_ids": [
+        "67b76e2db3054e74",
+        "ed537928d15df288",
+        "2e38055261e3296b",
+        "8a36e87b78909c1f",
+        "714474ea6c1d3834",
+        "ce0a8adeeaae7dda",
+        "dff65b9eb99e9869",
+        "51d84532844e1034",
+        "9e1f0a6b3534903b",
+        "c9a4a0ee46dfd97f"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-chapter1.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-article167.pdf",
+        "pdf/health-code-chapter27.pdf",
+        "pdf/health-code-article131.pdf",
+        "pdf/health-code-article165.pdf",
+        "pdf/health-code-chapter27.pdf",
+        "pdf/health-code-article181.pdf"
+      ],
+      "hit_chunk_ids": [
+        "67b76e2db3054e74"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What are the minimum width and height measurements of the required sign described in Section 1-02 in Chapter 1?",
+      "query_type": "narrow",
+      "expected_doc": "pdf/health-code-chapter1.pdf",
+      "expected_chunk_ids": [
+        "67b76e2db3054e74"
+      ],
+      "retrieved_chunk_ids": [
+        "67b76e2db3054e74",
+        "ee3c4401e31bd667",
+        "439105e422502130",
+        "9a049144b1404309",
+        "c9a4a0ee46dfd97f",
+        "dba2a09ab41d0152",
+        "8a36e87b78909c1f",
+        "3cd204b3527a1972",
+        "2e38055261e3296b",
+        "dd855c74741b1767"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-chapter1.pdf",
+        "pdf/health-code-chapter18.pdf",
+        "pdf/health-code-chapter13.pdf",
+        "pdf/health-code-chapter24.pdf",
+        "pdf/health-code-article181.pdf",
+        "pdf/health-code-chapter30.pdf",
+        "pdf/health-code-chapter10.pdf",
+        "pdf/health-code-chapter1.pdf",
+        "pdf/health-code-article81.pdf",
+        "pdf/health-code-chapter6.pdf"
+      ],
+      "hit_chunk_ids": [
+        "67b76e2db3054e74"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What is the violation for Criterion 4C, according to Chapter 23?",
+      "query_type": "narrow",
+      "expected_doc": "pdf/health-code-chapter23.pdf",
+      "expected_chunk_ids": [
+        "4d58997551cc6a1b"
+      ],
+      "retrieved_chunk_ids": [
+        "8e5f70788d2001b3",
+        "0a9cab900b7fab49",
+        "6854cfdb710127d1",
+        "4d58997551cc6a1b",
+        "f7425f84a459497f",
+        "24d38c41b1040fdb",
+        "4b333e22145224b8",
+        "fa8491980ceddc9b",
+        "8cba9488669e04b4",
+        "6accc6ef5c63a00c"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter27.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf"
+      ],
+      "hit_chunk_ids": [
+        "4d58997551cc6a1b"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 4,
+      "reciprocal_rank": 0.25,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What is the description for Condition II of Criterion 4K, according to Chapter 23?",
+      "query_type": "narrow",
+      "expected_doc": "pdf/health-code-chapter23.pdf",
+      "expected_chunk_ids": [
+        "4b333e22145224b8"
+      ],
+      "retrieved_chunk_ids": [
+        "3e7b33a7e042144d",
+        "24d38c41b1040fdb",
+        "fa8491980ceddc9b",
+        "84517fd25a82628d",
+        "51b23e754b0fe2e5",
+        "0a9cab900b7fab49",
+        "884ff754467998f2",
+        "1fed9b4182f6b229",
+        "4d58997551cc6a1b",
+        "875ec3a63eded710"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter32.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article88.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-article89.pdf"
+      ],
+      "hit_chunk_ids": [],
+      "recall": 0.0,
+      "precision": 0.0,
+      "first_hit_rank": null,
+      "reciprocal_rank": 0.0,
+      "doc_found": true,
+      "full_recall": false,
+      "error": null
+    },
+    {
+      "query": "What is the category for the violation code that is cited under NYCHC 81.46, according to Chpater 23?",
+      "query_type": "direct",
+      "expected_doc": "pdf/health-code-chapter23.pdf",
+      "expected_chunk_ids": [
+        "3e7b33a7e042144d"
+      ],
+      "retrieved_chunk_ids": [
+        "3e7b33a7e042144d",
+        "90a5bc99d7fc67e6",
+        "063df51167b12e10",
+        "c47d154ecc7fadfe",
+        "0a9cab900b7fab49",
+        "365114724400be72",
+        "fa9f2437d5160456",
+        "28ae316db5105ffd",
+        "c6167af33b9d9c96",
+        "35df816a9273f3db"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter6.pdf",
+        "pdf/health-code-chapter6.pdf"
+      ],
+      "hit_chunk_ids": [
+        "3e7b33a7e042144d"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    },
+    {
+      "query": "What is the appearance penalty for the violation code cited under NYSPHL 1399-o, according to Chapter 23?",
+      "query_type": "direct",
+      "expected_doc": "pdf/health-code-chapter23.pdf",
+      "expected_chunk_ids": [
+        "3e7b33a7e042144d"
+      ],
+      "retrieved_chunk_ids": [
+        "3e7b33a7e042144d",
+        "e09e8b5b1871fd63",
+        "f2d400454bacf83a",
+        "0a9cab900b7fab49",
+        "9ceb49a501393968",
+        "cc7db08a715bfbfb",
+        "e85c9c0e81cee568",
+        "e2299a2d0e2b2536",
+        "e936c2e7b4795dea",
+        "4ff8766f5ba8aace"
+      ],
+      "retrieved_docs": [
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf",
+        "pdf/health-code-chapter23.pdf"
+      ],
+      "hit_chunk_ids": [
+        "3e7b33a7e042144d"
+      ],
+      "recall": 1.0,
+      "precision": 0.1,
+      "first_hit_rank": 1,
+      "reciprocal_rank": 1.0,
+      "doc_found": true,
+      "full_recall": true,
+      "error": null
+    }
+  ]
+}

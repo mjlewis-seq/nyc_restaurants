@@ -1,0 +1,7 @@
+# Secrets - do not commit.
+.env
+
+# Test-specific
+output/
+cache/
+__pycache__/
