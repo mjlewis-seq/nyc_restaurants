@@ -1,0 +1,13 @@
+# Secrets — never commit the API key or DB password
+.Renviron
+
+# RStudio session state
+.Rproj.user/
+.Rhistory
+.RData
+
+# macOS
+.DS_Store
+
+# Raw inspection data (138 MB — exceeds GitHub's 100 MB file limit)
+data/DOHMH_Restaurant_Inspections.csv
