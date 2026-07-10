@@ -1,250 +1,159 @@
-{
-  "query": "Can a person sell adulterated or misbranded food?",
-  "query_type": "direct",
-  "expected_doc": "pdf/health-code-article71.pdf",
-  "expected_chunk_ids": ["067b594ada1a6368"],
-  "notes": null
-}
-{
-  "query": "When is food deemed adulterated?",
-  "query_type": "direct",
-  "expected_doc": "pdf/health-code-article71.pdf",
-  "expected_chunk_ids":
-  [
-    "f8fc28451113a3fd",
-    "ccd0ae05ea83feb4",
-    "e58c35d41d9dac11",
-    "39668217fea0519e",
-    "a28801384136bcde",
-    "cc6bba16e4c3c3c8",
-    "ee2694899eeb8e12",
-    "641cf05b30411dae",
-    "d4968b91aa00322c"
-  ],
-  "notes": "There are 9 criteria for this answer. Answer spans multiple chunks."
-}
-{
-  "query": "What is the minimum cooking temperature at which roast beef should be cooked?",
-  "query_type": "paraphrased",
-  "expected_doc": "pdf/health-code-article81.pdf",
-  "expected_chunk_ids": ["1a67eacf6f948d12"],
-  "notes": null
-}
-{
-  "query": "When can employees and patrons not use the same toilets?",
-  "query_type": "paraphrased",
-  "expected_doc": "pdf/health-code-article81.pdf",
-  "expected_chunk_ids": ["2e38055261e3296b"],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-article88.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-article88.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "Can anyone apply for a mobile vending unit permit?",
-  "query_type": "paraphrased",
-  "expected_doc": "pdf/health-code-article-89.pdf",
-  "expected_chunk_ids":
-  [
-    "bce1b686a185e7c1"
-  ],
-  "notes": null
-}
-{
-  "query": "How is food defined in Article 89?",
-  "query_type": "cross-ref",
-  "expected_doc": "pdf/health-code-article-89.pdf",
-  "expected_chunk_ids":
-  [
-    "9ebb68a83fca19b0",
-    "5d9bf0bb908d2d38"
-  ],
-  "notes": "The first chunk says that Article 89 defines food the way it is defined in Article 71. The second chunk contains the food definition from Article 71."
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-article151.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-article151.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-article181.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-article181.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter1.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter1.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter1.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter6.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter6.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter23.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter23.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter23.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter23.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter27.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter27.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter31.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
-{
-  "query": "",
-  "query_type": "",
-  "expected_doc": "pdf/health-code-chapter31.pdf",
-  "expected_chunk_ids":
-  [
-    ""
-  ],
-  "notes": null
-}
+[
+  {
+    "query": "Can a person sell adulterated or misbranded food?",
+    "query_type": "direct",
+    "expected_doc": "pdf/health-code-article71.pdf",
+    "expected_chunk_ids": ["067b594ada1a6368"],
+    "notes": null
+  },
+  {
+    "query": "When is food deemed adulterated?",
+    "query_type": "direct",
+    "expected_doc": "pdf/health-code-article71.pdf",
+    "expected_chunk_ids": [
+      "f8fc28451113a3fd",
+      "ccd0ae05ea83feb4",
+      "e58c35d41d9dac11",
+      "39668217fea0519e",
+      "a28801384136bcde",
+      "cc6bba16e4c3c3c8",
+      "ee2694899eeb8e12",
+      "641cf05b30411dae",
+      "d4968b91aa00322c"
+    ],
+    "notes": "There are 9 criteria for this answer. Answer spans multiple chunks."
+  },
+  {
+    "query": "What is the minimum cooking temperature at which roast beef should be cooked?",
+    "query_type": "paraphrased",
+    "expected_doc": "pdf/health-code-article81.pdf",
+    "expected_chunk_ids": ["1a67eacf6f948d12"],
+    "notes": null
+  },
+  {
+    "query": "When can employees and patrons not use the same toilets?",
+    "query_type": "paraphrased",
+    "expected_doc": "pdf/health-code-article81.pdf",
+    "expected_chunk_ids": ["2e38055261e3296b"],
+    "notes": null
+  },
+  {
+    "query": "What kind of thermometers will be provided for the testing of internal food temperatures at temporary food establishments?",
+    "query_type": "narrow",
+    "expected_doc": "pdf/health-code-article88.pdf",
+    "expected_chunk_ids": ["1ad96b1a40080445"] ,
+    "notes": null
+  },
+  {
+    "query": "What does an event sponsor have to submit to the Department at least a month before the start of the event?",
+    "query_type": "paraphrased",
+    "expected_doc": "pdf/health-code-article88.pdf",
+    "expected_chunk_ids": ["884ff754467998f2"] ,
+    "notes": null
+  },
+  {
+    "query": "Can anyone apply for a mobile vending unit permit?",
+    "query_type": "paraphrased",
+    "expected_doc": "pdf/health-code-article-89.pdf",
+    "expected_chunk_ids": ["bce1b686a185e7c1"],
+    "notes": null
+  },
+  {
+    "query": "How is food defined in Article 89?",
+    "query_type": "cross-ref",
+    "expected_doc": "pdf/health-code-article-89.pdf",
+    "expected_chunk_ids": ["9ebb68a83fca19b0", "5d9bf0bb908d2d38"],
+    "notes": "The first chunk says that Article 89 defines food the way it is defined in Article 71. The second chunk contains the food definition from Article 71."
+  },
+  {
+    "query": "What does Article 151, Section 151.02, Part B say on how waste should be managed to prevent pests?",
+    "query_type": "direct",
+    "expected_doc": "pdf/health-code-article151.pdf",
+    "expected_chunk_ids": ["cf0b74352dd5b329"] ,
+    "notes": null
+  },
+  {
+    "query": "What is the maximum amount of time that the Department can ask a food service business to carry out a pest management plan?",
+    "query_type": "adversarial",
+    "expected_doc": "pdf/health-code-article151.pdf",
+    "expected_chunk_ids": ["cf0b74352dd5b329"] ,
+    "notes": "There is no maximum amount of time. Pest management plans are continued for whatever amount of time the Department sets for that particular establishment."
+  },
+  {
+    "query": "Is pesticide usage sufficient for pest management?",
+    "query_type": "direct",
+    "expected_doc": "pdf/health-code-article151.pdf",
+    "expected_chunk_ids": ["9aa4f6e23957086b"] ,
+    "notes": null
+  },
+  {
+    "query": "What type of property is excluded from requirements on elimination of standing water as written in Section 151.03 of Article 151?",
+    "query_type": "narrow",
+    "expected_doc": "pdf/health-code-article151.pdf",
+    "expected_chunk_ids": ["9aa4f6e23957086b"] ,
+    "notes": null
+  },
+  {
+    "query": "What public spaces allow spitting?",
+    "query_type": "paraphrased",
+    "expected_doc": "pdf/health-code-article181.pdf",
+    "expected_chunk_ids": ["98cabe488328cc7b"] ,
+    "notes": "Spitting is categorically prohibited in public buildings."
+  },
+  {
+    "query": "What are the requirements for dishwashing areas in commercial premises that provide common eating utensils?",
+    "query_type": "adversarial",
+    "expected_doc": "pdf/health-code-article181.pdf",
+    "expected_chunk_ids": ["98cabe488328cc7b"] ,
+    "notes": "Common eating and drinking utensils are prohibited."
+  },
+  {
+    "query": "What does Section 181.17 of Article 181 say about smoking in an enclosed public space with 50 or more people gathered for religious purposes?",
+    "query_type": "narrow",
+    "expected_doc": "pdf/health-code-article181.pdf",
+    "expected_chunk_ids": ["98cabe488328cc7b"] ,
+    "notes": null
+  },
+  {
+    "query": "What sign do vendors of alcoholic beverages have to post in their establishments?",
+    "query_type": "direct",
+    "expected_doc": "pdf/health-code-chapter1.pdf",
+    "expected_chunk_ids": ["67b76e2db3054e74"] ,
+    "notes": null
+  },
+  {
+    "query": "What are the minimum width and height measurements of the required sign described in Section 1-02 in Chapter 1?",
+    "query_type": "narrow",
+    "expected_doc": "pdf/health-code-chapter1.pdf",
+    "expected_chunk_ids": ["67b76e2db3054e74"] ,
+    "notes": null
+  },
+    {
+    "query": "What is the violation for Criterion 4C, according to Chapter 23?",
+    "query_type": "narrow",
+    "expected_doc": "pdf/health-code-chapter23.pdf",
+    "expected_chunk_ids": ["4d58997551cc6a1b"] ,
+    "notes": null
+  },
+  {
+    "query": "What is the description for Condition II of Criterion 4K, according to Chapter 23?",
+    "query_type": "narrow",
+    "expected_doc": "pdf/health-code-chapter23.pdf",
+    "expected_chunk_ids": ["4b333e22145224b8"] ,
+    "notes": null
+  },
+  {
+    "query": "What is the category for the violation code that is cited under NYCHC 81.46, according to Chpater 23?",
+    "query_type": "direct",
+    "expected_doc": "pdf/health-code-chapter23.pdf",
+    "expected_chunk_ids": ["3e7b33a7e042144d"] ,
+    "notes": null
+  },
+  {
+    "query": "What is the appearance penalty for the violation code cited under NYSPHL 1399-o, according to Chapter 23?",
+    "query_type": "direct",
+    "expected_doc": "pdf/health-code-chapter23.pdf",
+    "expected_chunk_ids": ["3e7b33a7e042144d"] ,
+    "notes": null
+  }
+]
