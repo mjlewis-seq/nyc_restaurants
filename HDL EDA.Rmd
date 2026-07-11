@@ -1,0 +1,228 @@
+---
+title: "HDL Visualizations"
+author: "Lillie Hutchings"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(janitor)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(shiny)
+library(tidyverse)
+library(plotly)
+library(scales)
+restaurant_data <- read_csv("~/Downloads/DOHMH_New_York_City_Restaurant_Inspection_Results_20260707.csv") %>%
+  clean_names() %>%
+  mutate(
+    inspection_date = as.Date(inspection_date, format = "%m/%d/%Y"),
+    zipcode = as.character(zipcode),
+    address = paste(building, street),
+    grade = as.character(grade)
+  ) %>%
+  filter(
+    !is.na(grade),
+    grade %in% c("A", "B", "C"),
+    !is.na(inspection_date),
+    inspection_date != as.Date("1900-01-01")
+  ) %>%
+  group_by(camis) %>%
+  slice_max(inspection_date, n = 1, with_ties = FALSE) %>%
+  ungroup()
+
+View(restaurant_data)
+```
+
+## Plots
+
+```{r plots}
+#violation code plot
+ggplot(restaurant_data, aes(x = violation_code)) +
+  geom_bar(fill = "steelblue") +
+  labs(
+    title = "Counts by Category",
+    x = "Category",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+#critical/not critical plot
+ggplot(restaurant_data, aes(x = critical_flag)) +
+  geom_bar(fill = "steelblue") +
+  labs(
+    title = "Counts by Category",
+    x = "Category",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+
+#restaurant grade plot
+ggplot(restaurant_data, aes(x = grade)) +
+  geom_bar(fill = "steelblue") +
+  labs(
+    title = "Restaurant Inspection Grades",
+    x = "Grade",
+    y = "Number of Restaurants"
+  ) +
+  theme_minimal()
+
+#most common violation codes
+restaurant_data %>%
+  count(violation_code, sort = TRUE) %>%
+  slice_head(n = 20) %>%
+  ggplot(aes(x = reorder(violation_code, n), y = n)) +
+  geom_col(fill = "tomato") +
+  coord_flip() +
+  labs(
+    title = "Top 20 Most Common Violation Codes",
+    x = "Violation Code",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+#most common violation descriptions
+restaurant_data %>%
+  count(violation_description, sort = TRUE) %>%
+  slice_head(n = 15) %>%
+  ggplot(aes(x = reorder(violation_description, n), y = n)) +
+  geom_col(fill = "darkorange") +
+  coord_flip() +
+  labs(
+    title = "Top 15 Violation Descriptions",
+    x = "Violation Description",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+#violation codes & descriptions
+View(
+  restaurant_data %>%
+    distinct(violation_code, violation_description) %>%
+    arrange(violation_code)
+)
+
+#code and grade
+restaurant_data %>%
+  filter(!is.na(grade), !is.na(violation_code)) %>%
+  count(grade, violation_code) %>%
+  ggplot(aes(x = violation_code, y = n, fill = grade)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  labs(
+    title = "Violation Codes by Restaurant Grade",
+    x = "Violation Code",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+#grade vs critical
+restaurant_data %>%
+  filter(
+    !is.na(grade),
+    !is.na(critical_flag),
+    grade %in% c("A", "B", "C")
+  ) %>%
+  ggplot(aes(
+    x = grade,
+    fill = critical_flag
+  )) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = percent) +
+  labs(
+    title = "Critical Violations by Restaurant Grade",
+    x = "Restaurant Grade",
+    y = "Percentage of Violations",
+    fill = "Critical Status"
+  ) +
+  theme_minimal()
+
+# Find the 20 most common violation codes
+top_codes <- restaurant_data %>%
+  filter(!is.na(violation_code)) %>%
+  count(violation_code, sort = TRUE) %>%
+  slice_head(n = 20) %>%
+  pull(violation_code)
+
+# Graph critical status by violation code
+restaurant_data %>%
+  filter(
+    violation_code %in% top_codes,
+    !is.na(critical_flag)
+  ) %>%
+  ggplot(aes(
+    x = violation_code,
+    fill = critical_flag
+  )) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(
+    labels = function(x) paste0(round(x * 100), "%")
+  ) +
+  coord_flip() +
+  labs(
+    title = "Critical Status of the 20 Most Common Violation Codes",
+    x = "Violation Code",
+    y = "Percentage of Violations",
+    fill = "Critical Status"
+  ) +
+  theme_minimal()
+```
+
+## Summaries
+
+```{r summaries}
+#grade count & percentages
+restaurant_data %>%
+  count(grade) %>%
+  mutate(percent = round(n / sum(n) * 100, 2))
+
+#violation code count
+restaurant_data %>%
+  count(violation_code, sort = TRUE)
+
+#10 most common violations
+restaurant_data %>%
+  count(violation_code, violation_description, sort = TRUE) %>%
+  slice_head(n = 10)
+
+#num of unique violations
+restaurant_data %>%
+  summarise(
+    unique_violation_codes = n_distinct(violation_code),
+    unique_descriptions = n_distinct(violation_description)
+  )
+
+#grade by violation
+restaurant_data %>%
+  group_by(grade) %>%
+  summarise(
+    inspections = n(),
+    unique_violations = n_distinct(violation_code)
+  )
+
+#most common violation by grade
+restaurant_data %>%
+  group_by(grade, violation_code, violation_description) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  arrange(grade, desc(count))
+
+#grades w/violation code
+restaurant_data %>%
+  count(grade, violation_code) %>%
+  arrange(grade, desc(n))
+
+#dataset summary
+restaurant_data %>%
+  summarise(
+    Total_Records = n(),
+    Restaurants = n_distinct(camis),
+    Grades = n_distinct(grade),
+    Violation_Codes = n_distinct(violation_code),
+    Inspection_Dates = n_distinct(inspection_date)
+  )
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
