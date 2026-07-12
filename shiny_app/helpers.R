@@ -149,6 +149,108 @@ normalize_image_upload <- function(file_input, max_bytes = 5 * 1024^2) {
   list(ok = TRUE, image_b64 = base64encode(file_input$datapath), mime_type = mime_type)
 }
 
+# ---- NYC Health Code knowledge base (RAG) ------------------------------
+# Loads the portable KB bundle exported from the team's RAGFlow instance
+# (see rag/export in the nyc_restaurants repo): 2,866 health-code chunks
+# with pre-normalized Voyage embeddings, converted once to data/kb/kb.rds.
+# Retrieval = embed the query with Voyage AI, then a plain dot product.
+# Requires VOYAGE_API_KEY in .Renviron; callers should treat a NULL/error
+# result as "no excerpts available" and render nothing.
+
+load_health_code_kb_cached <- function(path = "data/kb/kb.rds") {
+  if (is.null(.helpers_cache$kb_checked)) {
+    .helpers_cache$kb <- if (file.exists(path)) {
+      tryCatch(readRDS(path), error = function(e) NULL)
+    } else NULL
+    .helpers_cache$kb_checked <- TRUE
+  }
+  .helpers_cache$kb
+}
+
+embed_query_voyage <- function(text) {
+  api_key <- trimws(Sys.getenv("VOYAGE_API_KEY"))
+  if (!nzchar(api_key)) {
+    stop("VOYAGE_API_KEY is not configured. Add it to .Renviron and restart R.")
+  }
+
+  # Cache embeddings per query text: repeat analyses of the same violation
+  # produce identical queries, and the free Voyage tier allows only 3
+  # requests/minute — cached queries cost nothing.
+  if (is.null(.helpers_cache$query_embeddings)) {
+    .helpers_cache$query_embeddings <- new.env(parent = emptyenv())
+  }
+  cached <- .helpers_cache$query_embeddings[[text]]
+  if (!is.null(cached)) return(cached)
+
+  req <- request("https://api.voyageai.com/v1/embeddings") |>
+    req_headers(
+      "Authorization" = paste("Bearer", api_key),
+      "content-type"  = "application/json"
+    ) |>
+    req_body_json(list(
+      model      = "voyage-4",  # query-time model per the KB bundle README
+      input      = list(text),
+      input_type = "query"
+    ))
+
+  resp <- perform_anthropic_request(req, "Could not reach Voyage AI to embed the query")
+  if (resp_status(resp) >= 300) {
+    stop("Voyage AI request failed (HTTP ", resp_status(resp), "): ",
+         clean_error_message(resp_body_string(resp)))
+  }
+  embedding <- as.numeric(unlist(resp_body_json(resp)$data[[1]]$embedding))
+  .helpers_cache$query_embeddings[[text]] <- embedding
+  embedding
+}
+
+retrieve_health_code_chunks <- function(query, k = 3, min_score = 0.45, min_chars = 80) {
+  kb <- load_health_code_kb_cached()
+  if (is.null(kb) || is.null(query) || !nzchar(trimws(query))) return(NULL)
+
+  query_vector <- embed_query_voyage(trimws(query))
+  if (length(query_vector) != ncol(kb$vectors)) {
+    stop("Query embedding dimension does not match the knowledge base.")
+  }
+
+  # Voyage vectors are pre-normalized, so dot product == cosine similarity.
+  scores <- as.vector(kb$vectors %*% query_vector)
+  ranked <- order(scores, decreasing = TRUE)
+
+  picked <- integer(0)
+  for (i in ranked) {
+    if (scores[i] < min_score) break
+    content <- trimws(kb$chunks$content[i])
+    # Skip heading-only fragments ("s15.01 Definition.") that carry no text.
+    if (nchar(content) < min_chars) next
+    # Skip penalty-schedule table debris (rows of "$200 $200 $200..." from
+    # chopped PDF tables) — mangled text that reads poorly as an excerpt.
+    if (lengths(regmatches(content, gregexpr("\\$", content))) >= 2) next
+    picked <- c(picked, i)
+    if (length(picked) >= k) break
+  }
+  if (length(picked) == 0) return(NULL)
+
+  data.frame(
+    doc     = kb$chunks$doc[picked],
+    content = trimws(kb$chunks$content[picked]),
+    score   = scores[picked],
+    stringsAsFactors = FALSE
+  )
+}
+
+# "pdf/health-code-article81.pdf" -> "NYC Health Code, Article 81"
+# "health-code-chapter23.pdf"     -> "NYC Health Code, Chapter 23"
+format_kb_source <- function(doc) {
+  match <- regmatches(doc, regexpr("(article|chapter)[0-9]+[a-zA-Z]*", doc, ignore.case = TRUE))
+  if (length(match) == 1 && nzchar(match)) {
+    kind <- if (grepl("^article", match, ignore.case = TRUE)) "Article" else "Chapter"
+    number <- toupper(sub("^(article|chapter)", "", match, ignore.case = TRUE))
+    paste0("NYC Health Code, ", kind, " ", number)
+  } else {
+    basename(doc)
+  }
+}
+
 # ---- Remediation knowledge base (hand-curated, scope to a few codes) --
 # Fill in real codes/descriptions once you've loaded the codebook table
 # and confirmed exact codes for your target scenarios.

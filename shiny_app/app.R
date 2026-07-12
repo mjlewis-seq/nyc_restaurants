@@ -5,6 +5,9 @@
 #
 # Required env vars (set in .Renviron or your shell before launching):
 #   ANTHROPIC_API_KEY
+#   VOYAGE_API_KEY  (optional — enables the "What the health code says"
+#                    excerpts retrieved from the team's RAG knowledge base;
+#                    without it the section is simply omitted)
 #   PGHOST      (default: localhost)
 #   PGPORT      (default: 5433 — matches the Postgres.app instance you're using)
 #   PGDATABASE  (default: dohmh_hackathon)
@@ -28,9 +31,10 @@ build_photo_input <- function() {
   )$find("input")$addAttrs(capture = "environment")$allTags()
 }
 
-# Warm the codebook cache once per R process so the first analysis click
-# doesn't pay the DB/CSV load; a failure here is retried at analysis time.
+# Warm the codebook and health-code KB caches once per R process so the
+# first analysis click doesn't pay the load; failures fall back gracefully.
 try(load_violation_codebook_cached(), silent = TRUE)
+try(load_health_code_kb_cached(), silent = TRUE)
 
 ui <- fluidPage(
   tags$head(
@@ -63,6 +67,9 @@ ui <- fluidPage(
       .photo-preview-meta a { color: var(--oxide); font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; white-space: nowrap; }
       .photo-error { color: #a03025; font-size: 13px; margin: 0 0 22px; }
       .btn-primary[disabled] { cursor: wait; opacity: 0.55; }
+      .kb-excerpt { border-left: 3px solid var(--oxide); margin: 0 0 16px; max-width: 720px; padding: 2px 0 2px 16px; }
+      .kb-excerpt p { font-size: 14px; line-height: 1.55; margin: 0 0 6px; }
+      .kb-excerpt cite { color: var(--muted); font-size: 11px; font-style: normal; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; }
       .start-over-wrap { border-top: 1px solid var(--fine-line); margin-top: 36px; padding-top: 15px; }
       .start-over-wrap a { color: var(--oxide); font-size: 12px; font-weight: 700; letter-spacing: 0.7px; text-decoration: none; text-transform: uppercase; }
       .main-panel { border-left: 1px solid var(--line); min-height: 480px; padding-left: 42px; }
@@ -249,16 +256,32 @@ server <- function(input, output, session) {
         if (is.null(llm_result$violation_code)) {
           list(kind = "unmatched", failed = isTRUE(llm_result$failed), llm = llm_result)
         } else {
-          incProgress(0.35, detail = "Preparing recommendations")
+          incProgress(0.2, detail = "Preparing recommendations")
           critical_flag <- get_critical_flag_safely(llm_result$violation_code)
           code_details <- codebook_df[codebook_df$violation_code == llm_result$violation_code, , drop = FALSE]
           remediation <- get_remediation(llm_result$violation_code, code_details$category[1])
+
+          incProgress(0.15, detail = "Citing the NYC Health Code")
+          kb_excerpts <- tryCatch(
+            retrieve_health_code_chunks(
+              paste(
+                code_details$health_code_citation[1],
+                code_details$description[1],
+                code_details$category[1],
+                llm_result$symptoms_observed,
+                notes
+              ),
+              k = 3
+            ),
+            error = function(e) NULL
+          )
 
           list(
             kind = "matched",
             llm = llm_result,
             critical_flag = critical_flag,
             remediation = remediation,
+            kb_excerpts = kb_excerpts,
             health_code_citation = code_details$health_code_citation[1],
             violation_description = code_details$description[1]
           )
@@ -340,6 +363,18 @@ server <- function(input, output, session) {
           p(strong("Typical severity: "), severity_label),
           p(strong("What we saw: "), r$llm$symptoms_observed),
           p(strong("Confidence: "), r$llm$confidence)
+        ),
+        if (!is.null(r$kb_excerpts) && nrow(r$kb_excerpts) > 0) tagList(
+          h5("What the health code says"),
+          lapply(seq_len(nrow(r$kb_excerpts)), function(i) {
+            excerpt <- r$kb_excerpts$content[i]
+            if (nchar(excerpt) > 600) excerpt <- paste0(substr(excerpt, 1, 600), "…")
+            div(
+              class = "kb-excerpt",
+              p(excerpt),
+              tags$cite(format_kb_source(r$kb_excerpts$doc[i]))
+            )
+          })
         ),
         h5("Try this first"),
         tags$ul(lapply(r$remediation$diy, tags$li)),
