@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NYC EATS — Hackathon Animation</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #05070f; overflow: hidden; }
+  canvas { position: absolute; inset: 0; margin: auto; }
+  #hint {
+    position: fixed; bottom: 14px; right: 18px; color: #4a5578;
+    font: 13px/1.4 -apple-system, "Helvetica Neue", sans-serif;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<div id="hint">F = fullscreen &nbsp;·&nbsp; click = restart</div>
+<script>
+"use strict";
+// ============================================================
+//  NYC EATS — 10-second looping title animation
+//  Night skyline · yellow cab · bouncing pizza · rolling bagel
+//  DOHMH grade cards · neon title pop
+// ============================================================
+
+const TITLE    = "NYC EATS";
+const SUBTITLE = "A HACKATHON SERVING THE FIVE BOROUGHS";
+const DUR = 10;                       // seconds per loop
+const W = 1920, H = 1080;
+const STREET_H = 90, GROUND = H - STREET_H;
+
+const cv = document.getElementById("c");
+const ctx = cv.getContext("2d");
+
+// fit canvas to window, keep 16:9
+function fit() {
+  const s = Math.min(innerWidth / W, innerHeight / H);
+  cv.style.width  = W * s + "px";
+  cv.style.height = H * s + "px";
+}
+addEventListener("resize", fit); fit();
+
+// deterministic random so the skyline is identical every loop
+let seed = 7;
+const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+
+// ---------- easing ----------
+const clamp01   = v => Math.max(0, Math.min(1, v));
+const ease      = (t, a, b) => clamp01((t - a) / (b - a));          // linear 0→1
+const outCubic  = p => 1 - Math.pow(1 - p, 3);
+const outBack   = p => { const c = 1.70158; p -= 1; return 1 + p * p * ((c + 1) * p + c); };
+const outBounce = p => {
+  const n = 7.5625, d = 2.75;
+  if (p < 1 / d)   return n * p * p;
+  if (p < 2 / d)   return n * (p -= 1.5 / d) * p + 0.75;
+  if (p < 2.5 / d) return n * (p -= 2.25 / d) * p + 0.9375;
+  return n * (p -= 2.625 / d) * p + 0.984375;
+};
+
+// ---------- build the city once ----------
+const buildings = [];
+let bx = 20;
+while (bx < W - 80) {
+  const bw = 90 + rnd() * 130;
+  const bh = 180 + rnd() * 430;
+  const wins = [];
+  const cols = Math.floor(bw / 34), rows = Math.floor(bh / 60);
+  for (let c = 0; c < cols; c++)
+    for (let r = 0; r < rows; r++)
+      if (rnd() < 0.42)
+        wins.push({ x: 12 + c * 34, y: 26 + r * 60, on: 1.2 + rnd() * 1.8 });
+  buildings.push({ x: bx, w: bw, h: bh, rise: 0.1 + (bx / W) * 0.9, wins });
+  bx += bw + 14 + rnd() * 30;
+}
+
+const stars = Array.from({ length: 30 }, () => ({
+  x: rnd() * W, y: 40 + rnd() * 380, ph: rnd() * Math.PI * 2, sp: 1.5 + rnd() * 2
+}));
+
+// three rooftops for the grade cards, spread across the city
+const roofPick = [0.22, 0.5, 0.78].map(f => buildings[Math.floor(f * buildings.length)]);
+const GRADES = ["A", "A", "B"];
+
+// ---------- draw helpers ----------
+function rrect(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, r);
+  ctx.fill();
+}
+
+function drawTaxi(x, bob) {
+  ctx.save();
+  ctx.translate(x, GROUND - 44 + bob);
+  ctx.fillStyle = "#ffcc00";
+  rrect(-110, -30, 220, 60, 10);                    // body
+  rrect(-65, -66, 110, 40, 12);                     // cabin
+  ctx.fillStyle = "#0b1030";
+  rrect(-55, -60, 90, 30, 6);                       // window
+  ctx.fillStyle = "#111";                           // checker stripe
+  for (let i = 0; i < 9; i++)
+    ctx.fillRect(-99 + i * 22 + (i % 2) * 0, (i % 2) ? -6 : 6 - 12, 11, 12);
+  ctx.fillStyle = "#fff";
+  rrect(-30, -80, 44, 14, 4);                       // roof light
+  ctx.fillStyle = "#0b1030";
+  ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center";
+  ctx.fillText("TAXI", -8, -70);
+  for (const wx of [-70, 70]) {                     // wheels
+    ctx.fillStyle = "#0a0a0a";
+    ctx.beginPath(); ctx.arc(wx, 30, 22, 0, 7); ctx.fill();
+    ctx.fillStyle = "#3a3f55";
+    ctx.beginPath(); ctx.arc(wx, 30, 9, 0, 7); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawPizza(x, y, rot) {
+  ctx.save();
+  ctx.translate(x, y); ctx.rotate(rot);
+  ctx.fillStyle = "#f4a83c";                        // cheese triangle, tip down
+  ctx.beginPath();
+  ctx.moveTo(0, 95); ctx.lineTo(-62, -75); ctx.lineTo(62, -75);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = "#c97b2d"; ctx.lineWidth = 18;  // crust
+  ctx.beginPath(); ctx.moveTo(-62, -75); ctx.lineTo(62, -75); ctx.stroke();
+  ctx.fillStyle = "#c0392b";                        // pepperoni
+  for (const [px, py, pr] of [[-16, -40, 13], [22, -18, 11], [-4, 18, 10]]) {
+    ctx.beginPath(); ctx.arc(px, py, pr, 0, 7); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawBagel(x, rot) {
+  ctx.save();
+  ctx.translate(x, GROUND - 58); ctx.rotate(rot);
+  ctx.fillStyle = "#d9a05b";
+  ctx.beginPath();
+  ctx.arc(0, 0, 58, 0, 7);
+  ctx.arc(0, 0, 22, 0, 7, true);                    // hole
+  ctx.fill("evenodd");
+  ctx.fillStyle = "#f2e2c4";                        // sesame seeds
+  for (let i = 0; i < 8; i++) {
+    const a = i * Math.PI / 4;
+    ctx.save();
+    ctx.translate(Math.cos(a) * 40, Math.sin(a) * 40);
+    ctx.rotate(a);
+    ctx.beginPath(); ctx.ellipse(0, 0, 3.5, 6, 0, 0, 7); ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+function drawGradeCard(x, y, letter, alpha) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.translate(x, y);
+  ctx.fillStyle = "#f7fafc";
+  rrect(-45, -55, 90, 110, 10);                     // card
+  ctx.fillStyle = "#2b6cb0";
+  ctx.beginPath(); ctx.roundRect(-45, -55, 90, 26, [10, 10, 0, 0]); ctx.fill();
+  ctx.fillStyle = "#fff";
+  ctx.font = "bold 13px sans-serif"; ctx.textAlign = "center";
+  ctx.fillText("SANITARY", 0, -37);
+  ctx.fillStyle = "#2b6cb0";
+  ctx.font = "bold 66px Georgia, serif";
+  ctx.fillText(letter, 0, 34);
+  ctx.restore();
+}
+
+// ---------- main frame ----------
+function draw(t) {
+  // sky gradient
+  const sky = ctx.createLinearGradient(0, 0, 0, H);
+  sky.addColorStop(0, "#0b1030");
+  sky.addColorStop(0.72, "#1b2a5e");
+  sky.addColorStop(1, "#31255c");
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, W, H);
+
+  // moon
+  ctx.globalAlpha = ease(t, 0.3, 1.5);
+  ctx.fillStyle = "#f5f0d8";
+  ctx.shadowColor = "#f5f0d8"; ctx.shadowBlur = 60;
+  ctx.beginPath(); ctx.arc(1560, 210, 70, 0, 7); ctx.fill();
+  ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+
+  // stars
+  ctx.fillStyle = "#fff";
+  for (const s of stars) {
+    ctx.globalAlpha = (0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph))) * ease(t, 0.2, 1);
+    ctx.fillRect(s.x, s.y, 3, 3);
+  }
+  ctx.globalAlpha = 1;
+
+  // skyline
+  for (const b of buildings) {
+    const up = outCubic(ease(t, b.rise * 0.9, b.rise * 0.9 + 0.8));
+    const h = b.h * up;
+    ctx.fillStyle = "#141b3f";
+    ctx.fillRect(b.x, GROUND - h, b.w, h);
+    if (up > 0.98) {
+      ctx.fillStyle = "#ffd166";
+      for (const w of b.wins) {
+        ctx.globalAlpha = ease(t, w.on, w.on + 0.35) * 0.95;
+        ctx.fillRect(b.x + w.x, GROUND - b.h + w.y, 14, 20);
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // street + lane line
+  ctx.fillStyle = "#090c22";
+  ctx.fillRect(0, GROUND, W, STREET_H);
+  ctx.fillStyle = "rgba(245,211,79,0.5)";
+  for (let x = ((t * 260) % 90) - 90; x < W; x += 90) ctx.fillRect(x, GROUND + 42, 50, 6);
+
+  // taxi: 1s → 4.5s, left → right
+  const tp = ease(t, 1, 4.5);
+  if (tp > 0 && tp < 1)
+    drawTaxi(-260 + tp * (W + 520), Math.sin(t * 34) * 2.5);
+
+  // pizza: 2s → 7s, five bounces across the rooftops
+  const pp = ease(t, 2, 7);
+  if (pp > 0 && pp < 1) {
+    const px = -150 + pp * (W + 300);
+    const py = 480 - Math.abs(Math.sin(pp * Math.PI * 5)) * 330;
+    drawPizza(px, py, pp * Math.PI * 4);
+  }
+
+  // bagel: 3.75s → 8s, right → left
+  const bp = ease(t, 3.75, 8);
+  if (bp > 0 && bp < 1)
+    drawBagel(W + 160 - bp * (W + 320), -bp * Math.PI * 9);
+
+  // grade cards: drop at 5s, 5.5s, 6s
+  GRADES.forEach((g, i) => {
+    const b = roofPick[i];
+    const gp = ease(t, 5 + i * 0.5, 5.7 + i * 0.5);
+    if (gp <= 0) return;
+    const landY = GROUND - b.h - 58;
+    const y = -120 + (landY + 120) * outBounce(gp);
+    drawGradeCard(b.x + b.w / 2, y, g, 1);
+  });
+
+  // title: pops at 6.25s with neon flicker
+  const ts = ease(t, 6.25, 6.85);
+  if (ts > 0) {
+    // flicker pattern right after the pop
+    let a = 1;
+    if (t > 7.0 && t < 7.4) {
+      const fl = [1, 0.3, 1, 0.45, 1, 0.7, 1];
+      a = fl[Math.floor((t - 7.0) / 0.4 * fl.length)] ?? 1;
+    }
+    ctx.save();
+    ctx.translate(W / 2, 390);
+    ctx.scale(outBack(ts), outBack(ts));
+    ctx.globalAlpha = a;
+    ctx.font = "900 190px 'Arial Black', Impact, sans-serif";
+    ctx.textAlign = "center";
+    ctx.shadowColor = "#ff4d6d"; ctx.shadowBlur = 55;
+    ctx.fillStyle = "#ff4d6d";
+    ctx.fillText(TITLE, 0, 0);
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#ffe3ea";
+    ctx.fillText(TITLE, 0, 0);
+    ctx.restore();
+  }
+
+  // subtitle: fades up 7.3s → 8.2s
+  const ss = ease(t, 7.3, 8.2);
+  if (ss > 0) {
+    ctx.globalAlpha = ss;
+    ctx.fillStyle = "#e8ecf7";
+    ctx.font = "600 40px 'Helvetica Neue', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(SUBTITLE, W / 2, 470 + (1 - ss) * 20);
+    ctx.globalAlpha = 1;
+  }
+}
+
+// ---------- run ----------
+// open with ?t=3.2 to freeze on a single frame (poster frames, debugging)
+const freezeT = new URLSearchParams(location.search).get("t");
+let start = performance.now();
+if (freezeT !== null) {
+  draw(parseFloat(freezeT) % DUR);
+} else {
+  (function tick(now) {
+    draw(((now - start) / 1000) % DUR);
+    requestAnimationFrame(tick);
+  })(start);
+}
+
+addEventListener("click", () => { start = performance.now(); });
+addEventListener("keydown", e => {
+  if (e.key.toLowerCase() === "f")
+    document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+});
+</script>
+</body>
+</html>

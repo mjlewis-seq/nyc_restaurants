@@ -1,0 +1,17 @@
+# Secrets — never commit the API key or DB password
+.Renviron
+
+# RStudio session state
+.Rproj.user/
+.Rhistory
+.RData
+
+# macOS
+.DS_Store
+
+# Raw inspection data (138 MB — exceeds GitHub's 100 MB file limit)
+data/DOHMH_Restaurant_Inspections.csv
+
+# RAG knowledge-base bundle (binary vectors — distribute the zip separately,
+# per rag/export/README.md in the team repo)
+data/kb/
